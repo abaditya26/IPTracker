@@ -1,3 +1,5 @@
+{% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,33 +37,42 @@
         <div class="container-fluid h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-4">
-                    <form action="" method="post">
-                        <div class="divider my-4">
-                            <h6 class="display-6">Join a meeting</h6>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <input type="text" name="code" id="code" class="form-control form-control-lg"
-                                placeholder="Enter Meeting code" />
-                        </div>
-                        <div class="text-center text-lg-start mt-4 pt-2">
-                            <center>
-                                <input type="submit" class="btn btn-primary btn-lg"
-                                    style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Join">
-                            </center>
-                        </div>
-                        
-                        <div class="form-outline mb-4 text-center">
-                            <blockquote class="blockquote">
-                                Please Authorise with your account to proceed.
-                            </blockquote>
-                        </div>
-                        <div class="text-center text-lg-start mt-4 pt-2">
-                            <center>
-                                <input type="submit" class="btn btn-primary btn-lg"
-                                    style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Authorize">
-                            </center>
-                        </div>
-                    </form>
+                    {% if request.user.is_authenticated %}
+                        <form action="" method="post">
+                            <div class="divider my-4">
+                                <h6 class="display-6">Join a meeting</h6>
+                            </div>
+                            {% csrf_token %}
+                            <div class="form-outline mb-4">
+                                <input type="text" name="code" id="code" class="form-control form-control-lg"
+                                    placeholder="Enter Meeting code" />
+                            </div>
+                            <div class="text-center text-lg-start mt-4 pt-2">
+                                <center>
+                                    <input type="submit" class="btn btn-primary btn-lg"
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Join">
+                                </center>
+                            </div>
+                        </form>
+                    {% else %}
+                        <form action="{% provider_login_url 'google' %}" method="post">
+                            {% csrf_token %}
+                            <div class="divider my-4">
+                                <h6 class="display-6">Join a meeting</h6>
+                            </div>
+                            <div class="form-outline mb-4 text-center">
+                                <blockquote class="blockquote">
+                                    Please Authorise with your account to proceed.
+                                </blockquote>
+                            </div>
+                            <div class="text-center text-lg-start mt-4 pt-2">
+                                <center>
+                                    <input type="submit" class="btn btn-primary btn-lg"
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Authorize">
+                                </center>
+                            </div>
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="col-md-6"></div>
             </div>
